@@ -9,8 +9,8 @@ use crate::ini_file_helpers;
 
 
 
-//TODO: add primary if there's already then change it
 //TODO: Max character must be in the config file
+//TODO: Add remove json and return
 static MAX_CHARACTERS: usize = 10;
 
 
@@ -40,6 +40,12 @@ pub fn token_setting_main() {
                     Err(e) => println!("ERROR: {}", e),
                 }
             },
+            "3" => {
+                match change_primary() {
+                    Ok(_result) => (),
+                    Err(e) => println!("ERROR: {}", e),
+                }
+            }
             _ => {},
         }
     }   
@@ -149,6 +155,16 @@ fn check_if_json_exist() -> Result<String, std::io::Error> {
 
 }
 
+fn change_primary() -> Result<String, std::io::Error> {
+    let mut primary_name = String::new();
+    print!("    Primary Name: ");
+    io::stdout().flush().unwrap();
+    io::stdin()
+        .read_line(&mut primary_name)?;
 
+    ini_file_helpers::edit_ini_data("Settings", &primary_name, "Primary");
+    Ok(("").to_string())
+    
+}
 
 

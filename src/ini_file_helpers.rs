@@ -1,16 +1,18 @@
-use config::{Config, File};
-
+use configparser::ini::{Ini};
 
 
 pub fn access_ini_data(category: &str, data: &str) -> String {
-    let settings = Config::builder()
-        .add_source(File::with_name("config"))
-        .build()
-        .unwrap();
+    let mut config = Ini::new();
+    config.load("config.ini").expect("Config not found");
+    let res = config.get(category, data).unwrap();
+    res
+    
+}
 
-    let key = format!("{}.{}", category, data);
-   
-    let value: String = settings.get(&key).unwrap();
+pub fn edit_ini_data(category: &str, data: &str, key: &str) {
+    let mut config = Ini::new();
+    config.load("config.ini").expect("Config not found");
+    config.set(category, key, Some(data.to_string()));
+    config.write("config.ini").expect("Config failed to write");
 
-    value
 }
