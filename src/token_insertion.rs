@@ -9,8 +9,6 @@ use crate::ini_file_helpers;
 
 
 
-//TODO: Max character must be in the config file
-//TODO: Add remove json and return
 static MAX_CHARACTERS: usize = 10;
 
 
@@ -40,11 +38,20 @@ pub fn token_setting_main() {
                     Err(e) => println!("ERROR: {}", e),
                 }
             },
+            "2" => {
+                match remove_token() {
+                    Ok(_result) => (),
+                    Err(e) => println!("ERROR: {}", e),
+                }
+            }
             "3" => {
                 match change_primary() {
                     Ok(_result) => (),
                     Err(e) => println!("ERROR: {}", e),
                 }
+            }
+            "4" => {
+                return;
             }
             _ => {},
         }
@@ -78,7 +85,7 @@ fn token_setting_menu_show() {
 
     println!(
     "
-    [1]. Add Token.
+    [1]. Add/Edit Token.
     [2]. Remove Token.
     [3]. Set Primary.
     [4]. Return.
@@ -166,5 +173,24 @@ fn change_primary() -> Result<String, std::io::Error> {
     Ok(("").to_string())
     
 }
+
+fn remove_token() -> Result<String, std::io::Error> {
+    let mut key_name = String::new();
+    print!("    Key Name: ");
+    io::stdout().flush().unwrap();
+    io::stdin()
+        .read_line(&mut key_name)?;
+
+    
+    remove_token_key_in_json(&key_name);
+    Ok(("").to_string())
+}
+
+fn remove_token_key_in_json(key_to_remove: &String) {
+    let mut json_hash = get_hashmap();
+    json_hash.remove(key_to_remove.trim());
+    save_hashmap(json_hash);
+}
+
 
 

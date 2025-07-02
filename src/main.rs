@@ -1,7 +1,6 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
 
-//TODO: Token insertion with custom name + token with default primary
 //TODO: Server insertion with customer server name + token with default primary
 
 mod bootstrap;
