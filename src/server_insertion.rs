@@ -53,7 +53,7 @@ pub fn server_setting_main() {
 
 fn add_server() -> Result<String, std::io::Error>  {
     let mut name = String::new();
-    let mut token = String::new();
+    let mut server_id = String::new();
 
     print!("    Server Name [LIMIT {} CHARACTERS]:", MAX_CHARACTERS);
     io::stdout().flush().unwrap();
@@ -69,19 +69,19 @@ fn add_server() -> Result<String, std::io::Error>  {
     print!("    Server Id: ");
     io::stdout().flush().unwrap();
     io::stdin()
-        .read_line(&mut token)?;
+        .read_line(&mut server_id)?;
 
-    if token.trim().is_empty() {
+    if server_id.trim().is_empty() {
         return Err(Error::new(ErrorKind::InvalidInput, "Token cannot be empty"))
     }
 
     
-    let mut token_hash = get_hashmap();
-    token_hash.insert(name.clone().trim().to_string(), token.clone().trim().to_string());
-    save_hashmap(token_hash);
+    let mut server_hash = get_hashmap();
+    server_hash.insert(name.clone().trim().to_string(), server_id.clone().trim().to_string());
+    save_hashmap(server_hash);
 
     println!("\n\n");
-    Ok(format!("Name: {}, Token: {}", name, token))
+    Ok(format!("Name: {}, Token: {}", name, server_id))
 
 }
 
