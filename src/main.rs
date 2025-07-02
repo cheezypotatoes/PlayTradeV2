@@ -5,6 +5,7 @@ use std::io::{self, Write};
 
 mod bootstrap;
 mod token_insertion;
+mod server_insertion;
 mod ini_file_helpers;
 
 fn main() {
@@ -30,7 +31,7 @@ fn main() {
         match player_option_picked.trim() {
         "1" => {println!("start")},
         "2" => {token_insertion::token_setting_main()},
-        "3" => {println!("server")},
+        "3" => {server_insertion::server_setting_main()},
         "4" => {println!("message settings")},
         "5" => {println!("mode")},
         _ => {}
