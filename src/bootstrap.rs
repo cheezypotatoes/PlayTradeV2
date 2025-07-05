@@ -13,6 +13,7 @@ fn create_configuration_file(){
 
     writeln!(file, "[Settings]").expect("Failed to write to config.ini");
     writeln!(file, "primary=None").expect("Failed to write to config.ini"); 
+    writeln!(file, "message=None").expect("Failed to write to config.ini"); 
 
     
 

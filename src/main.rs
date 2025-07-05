@@ -1,12 +1,15 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
 
-//TODO: Server insertion with customer server name + token with default primary
+// TODO: Message settings with primary
+// TODO: Mode 
+// TODO: Start
 
 mod bootstrap;
-mod token_insertion;
-mod server_insertion;
+mod token_settings;
+mod server_settings;
 mod ini_file_helpers;
+mod message_settings;
 
 fn main() {
     bootstrap::bootstrap_main();
@@ -30,9 +33,9 @@ fn main() {
 
         match player_option_picked.trim() {
         "1" => {println!("start")},
-        "2" => {token_insertion::token_setting_main()},
-        "3" => {server_insertion::server_setting_main()},
-        "4" => {println!("message settings")},
+        "2" => {token_settings::token_setting_main()},
+        "3" => {server_settings::server_setting_main()},
+        "4" => {message_settings::message_setting_main()},
         "5" => {println!("mode")},
         _ => {}
     }
