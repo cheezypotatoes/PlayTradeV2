@@ -3,6 +3,4 @@ tokens.json
 server.json
 config.ini
 .vscode
-
-/src
 test.rs
