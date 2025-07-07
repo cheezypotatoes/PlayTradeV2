@@ -15,7 +15,16 @@ fn create_configuration_file(){
     writeln!(file, "primary=None").expect("Failed to write to config.ini"); 
     writeln!(file, "message=None").expect("Failed to write to config.ini"); 
 
+    writeln!(file, "[Post Request Mode]").expect("Failed to write to config.ini");
+    writeln!(file, "multiple_servers=false").expect("Failed to write to config.ini"); 
+    writeln!(file, "multiple_accounts=false").expect("Failed to write to config.ini"); 
+    writeln!(file, "time_randomizer=0").expect("Failed to write to config.ini"); 
+    writeln!(file, "time_specific=0").expect("Failed to write to config.ini"); 
     
+
+    writeln!(file, "[Message Mode]").expect("Failed to write to config.ini");
+    writeln!(file, "randomize_fonts=false").expect("Failed to write to config.ini"); 
+    writeln!(file, "emoji_injection=false").expect("Failed to write to config.ini"); 
 
 }
 

@@ -1,10 +1,10 @@
 use configparser::ini::{Ini};
 
 
-pub fn access_ini_data(category: &str, data: &str) -> String {
+pub fn access_ini_data(category: &str, key: &str) -> String {
     let mut config = Ini::new();
     config.load("config.ini").expect("Config not found");
-    let res = config.get(category, data).unwrap();
+    let res = config.get(category, key).unwrap();
     res
     
 }

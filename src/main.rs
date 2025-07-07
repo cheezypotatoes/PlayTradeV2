@@ -1,7 +1,7 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
 
-// TODO: Message settings with primary
+
 // TODO: Mode 
 // TODO: Start
 
@@ -10,6 +10,7 @@ mod token_settings;
 mod server_settings;
 mod ini_file_helpers;
 mod message_settings;
+mod mode_settings;
 
 fn main() {
     bootstrap::bootstrap_main();
@@ -36,7 +37,7 @@ fn main() {
         "2" => {token_settings::token_setting_main()},
         "3" => {server_settings::server_setting_main()},
         "4" => {message_settings::message_setting_main()},
-        "5" => {println!("mode")},
+        "5" => {mode_settings::mode_setting_main()},
         _ => {}
     }
     }
