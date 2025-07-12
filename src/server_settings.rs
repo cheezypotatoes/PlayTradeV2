@@ -5,6 +5,7 @@ use std::fs::File;
 use std::fs;
 use serde_json;
 use regex::Regex;
+use colored::*;
 
 
 static MAX_CHARACTERS: usize = 10;
@@ -26,20 +27,20 @@ pub fn server_setting_main() {
         .expect("Failed to read line");
 
         if !allowed_text.contains(player_option_picked.trim()) {
-            println!("    Option not found");
+            println!("\n    {} Option not found", "ERROR:".red().bold());
         }
 
         match player_option_picked.trim() {
             "1" => {
                 match add_server() {
                     Ok(_result) => (),
-                    Err(e) => println!("ERROR: {}", e),
+                    Err(e) => println!("\n    {} {}", "ERROR:".red().bold(), e),
                 }
             },
             "2" => {
                 match remove_server() {
                     Ok(_result) => (),
-                    Err(e) => println!("ERROR: {}", e),
+                    Err(e) => println!("\n    {} {}", "ERROR:".red().bold(), e),
                 }
             },
             "3" => {
@@ -58,7 +59,7 @@ fn add_server() -> Result<String, std::io::Error>  {
     let re = Regex::new(r"^https://discord\.com/api/v\d+/channels/\d{17,20}/messages$").unwrap();
 
 
-    print!("    Server Name [LIMIT {} CHARACTERS]:", MAX_CHARACTERS);
+    print!("    Server Name {}:", format!("[LIMIT {} CHARACTERS]", MAX_CHARACTERS).truecolor(192, 192, 0).bold());
     io::stdout().flush().unwrap();
     io::stdin()
         .read_line(&mut name)?;
@@ -70,7 +71,7 @@ fn add_server() -> Result<String, std::io::Error>  {
     }
 
    
-    print!("    Server Id: ");
+    print!("    Server Api Link: ");
     io::stdout().flush().unwrap();
     io::stdin()
         .read_line(&mut server_id)?;
@@ -102,14 +103,21 @@ fn remove_server() -> Result<String, std::io::Error> {
         .read_line(&mut key_name)?;
 
     
-    remove_server_key_in_json(&key_name);
-    Ok(("").to_string())
+    match remove_server_key_in_json(&key_name) {
+        Ok(msg) => Ok(msg),
+        Err(e) => Err(e),
+    }
 }
 
-fn remove_server_key_in_json(key_to_remove: &String) {
+fn remove_server_key_in_json(key_to_remove: &String) -> Result<String, std::io::Error> {
+
     let mut json_hash = get_hashmap();
+    if !json_hash.contains_key(key_to_remove.trim()) { 
+        return Err(Error::new(ErrorKind::InvalidInput, format!("Name not found!"),));
+    }
     json_hash.remove(key_to_remove.trim());
     save_hashmap(json_hash);
+    Ok("Server removed successfully".to_string())
 }
 
 
@@ -119,18 +127,15 @@ fn server_setting_menu_show() {
     let hash_map = get_hashmap();
    
 
-    println!("    -- Server Setting --");
+    println!("    {}", "-- Server Setting --".truecolor(0, 128, 128).bold());
     for (key, value) in &hash_map {
         println!("    {:<width$} - {}", key, value, width = MAX_CHARACTERS);
     }
 
-    println!(
-    "
-    [1]. Add/Edit Server.
-    [2]. Remove Server.
-    [3]. Return.
-    "
-    );
+    println!("    {} Add/Edit Server.", "[1]".truecolor(0, 128, 128).bold());
+    println!("    {} Remove Server.", "[2]".truecolor(0, 128, 128).bold());
+    println!("    {} Return.", "[3]".truecolor(0, 128, 128).bold());
+  
     
 }
 

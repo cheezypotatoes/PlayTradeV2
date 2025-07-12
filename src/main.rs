@@ -34,6 +34,7 @@ fn main() {
             println!("    Option not found");
         }
 
+        println!(); 
         match player_option_picked.trim() {
         "1" => {message_sender::message_sender_main()},
         "2" => {token_settings::token_setting_main()},
