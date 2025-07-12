@@ -1,8 +1,9 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
+use colored::*;
 
 
-// TODO: Mode 
+
 // TODO: Start
 
 mod bootstrap;
@@ -11,10 +12,11 @@ mod server_settings;
 mod ini_file_helpers;
 mod message_settings;
 mod mode_settings;
+mod message_sender;
 
 fn main() {
     bootstrap::bootstrap_main();
-    let allowed_text: HashSet<&str> = HashSet::from(["1", "2", "3", "4", "5", "6"]);
+    let allowed_text: HashSet<&str> = HashSet::from(["1", "2", "3", "4", "5", "6", "7"]);
     let mut player_option_picked = String::new(); 
 
     while player_option_picked.trim() != "6" {
@@ -33,7 +35,7 @@ fn main() {
         }
 
         match player_option_picked.trim() {
-        "1" => {println!("start")},
+        "1" => {message_sender::message_sender_main()},
         "2" => {token_settings::token_setting_main()},
         "3" => {server_settings::server_setting_main()},
         "4" => {message_settings::message_setting_main()},
@@ -48,22 +50,32 @@ fn main() {
 }
 
 fn main_menu_show() {
-    println!(r#"
+    println!(
+        "{}",
+        r#"
     ____  _               _____              _      
     |  _ \| | __ _ _   _  |_   _| __ __ _  __| | ___ 
     | |_) | |/ _` | | | |   | || '__/ _` |/ _` |/ _ \
     |  __/| | (_| | |_| |   | || | (_| | (_| |  __/
     |_|   |_|\__,_|\__, |   |_||_|  \__,_|\__,_|\___|
                     |___/                        V2
-    "#);
+    "#
+        .bright_cyan()
+        .bold()
+    );
 
-    println!(r#"
-    [1]. Start Message.
-    [2]. Token Settings.
-    [3]. Server Settings.
-    [4]. Message Settings.
-    [5]. Message Mode.
-    [6]. Exit.
-    "#)
+    let teal = |text: &str| text.truecolor(0, 128, 128);
+    let menu = [
+        "Start Message.",
+        "Token Settings.",
+        "Server Settings.",
+        "Message Settings.",
+        "Message Mode.",
+        "Exit.",
+    ];
+
+    for (i, item) in menu.iter().enumerate() {
+        println!("    {} {}", teal(&format!("[{}]", i + 1)), item);
+    }
 }
 
