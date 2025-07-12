@@ -4,6 +4,7 @@ use std::io::{self, Write, ErrorKind, Error};
 use std::fs::File;
 use std::fs;
 use serde_json;
+use regex::Regex;
 
 
 static MAX_CHARACTERS: usize = 10;
@@ -54,6 +55,8 @@ pub fn server_setting_main() {
 fn add_server() -> Result<String, std::io::Error>  {
     let mut name = String::new();
     let mut server_id = String::new();
+    let re = Regex::new(r"^https://discord\.com/api/v\d+/channels/\d{17,20}/messages$").unwrap();
+
 
     print!("    Server Name [LIMIT {} CHARACTERS]:", MAX_CHARACTERS);
     io::stdout().flush().unwrap();
@@ -66,6 +69,7 @@ fn add_server() -> Result<String, std::io::Error>  {
         return Err(Error::new(ErrorKind::InvalidInput, format!("Name must be {} characters or less", MAX_CHARACTERS),))
     }
 
+   
     print!("    Server Id: ");
     io::stdout().flush().unwrap();
     io::stdin()
@@ -73,7 +77,12 @@ fn add_server() -> Result<String, std::io::Error>  {
 
     if server_id.trim().is_empty() {
         return Err(Error::new(ErrorKind::InvalidInput, "Token cannot be empty"))
+    } 
+    
+    if !re.is_match(&server_id.trim()) {
+        return Err(Error::new(ErrorKind::InvalidInput, format!("Invalid Server Format"),))
     }
+
 
     
     let mut server_hash = get_hashmap();
