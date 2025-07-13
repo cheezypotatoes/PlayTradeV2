@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
+use colored::*;
 
 use crate::ini_file_helpers;
 
@@ -39,15 +40,12 @@ pub fn message_setting_main() {
 
 
 fn message_setting_menu_show() {
-    println!("    -- Current Message --");
+    println!("    {}", "-- Current Message --".truecolor(0, 128, 128).bold());
     println!("    {}", ini_file_helpers::access_ini_data("Settings", "message"));
 
-    println!(
-    "
-    [1]. Edit Message.
-    [2]. Return.
-    "
-    );
+    
+    println!("    {} Edit Message.", "[1]".truecolor(0, 128, 128).bold());
+    println!("    {} Return.", "[2]".truecolor(0, 128, 128).bold());
 }
 
 fn edit_message() -> Result<String, std::io::Error> {

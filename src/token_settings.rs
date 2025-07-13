@@ -3,6 +3,7 @@ use std::collections::HashMap;
 use std::io::{self, Write, ErrorKind, Error};
 use std::fs::File;
 use std::fs;
+use colored::*;
 use serde_json;
 
 use crate::ini_file_helpers;
@@ -66,7 +67,7 @@ fn token_setting_menu_show() {
     let mut primary_found = false;
     let primary = ini_file_helpers::access_ini_data("Settings", "primary");
 
-    println!("    -- Token Setting --");
+    println!("    {}", "-- Token Setting --".truecolor(0, 128, 128).bold());
     for (key, value) in &hash_map {
         if key == &primary {
             println!("    {:<width$} - {} [Primary]", key, value, width = MAX_CHARACTERS);
@@ -83,14 +84,13 @@ fn token_setting_menu_show() {
         println!("    (No Primary Session Found)");
     }
 
-    println!(
-    "
-    [1]. Add/Edit Token.
-    [2]. Remove Token.
-    [3]. Set Primary.
-    [4]. Return.
-    "
-    );
+    
+    println!("    {} Add/Edit Token.", "[1]".truecolor(0, 128, 128).bold());
+    println!("    {} Remove Token.", "[2]".truecolor(0, 128, 128).bold());
+    println!("    {} Set Primary.", "[3]".truecolor(0, 128, 128).bold());
+    println!("    {} Return.", "[4]".truecolor(0, 128, 128).bold());
+
+    
     
 }
 

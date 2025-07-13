@@ -9,7 +9,7 @@ use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE};
 use std::fs::{File};
 use std::collections::HashMap;
 use rand::{rng, Rng};
-
+use colored::*;
 use serde_json;
 
 
@@ -34,7 +34,7 @@ fn multiple_account_thread(token: Vec<String>, server: Vec<String>) -> Result<Jo
     let handle = thread::spawn(move || {
         while IS_SENDER_THREAD_RUNNING.load(Ordering::Relaxed) {
 
-            println!("    MESSAGE SUCCESSFULLY SENT TO [{:?}]: TOKEN [{:?}] MULTIPLE",server ,token);
+            println!("    MESSAGE SUCCESSFULLY SENT TO [{:?}]: TOKEN [{:?}] MULTIPLE", server ,token);
             
             thread::sleep(Duration::from_secs(1));
         }
@@ -57,7 +57,7 @@ fn non_multiple_account_thread(token: String, servers: Vec<String>) -> Result<Jo
         while IS_SENDER_THREAD_RUNNING.load(Ordering::Relaxed) {
             if let Some(server) = server_cycle.next() {
                 send_message(&token, server);
-                println!("    MESSAGE SUCCESSFULLY SENT TO [{:?}]", server);
+                println!("    MESSAGE SUCCESSFULLY SENT TO [{}]", format!("{}", server).truecolor(0, 128, 128));
             }
 
             thread::sleep(Duration::from_secs(debounce_time_per_server));
@@ -165,7 +165,7 @@ pub fn message_sender_main() {
         }
     };
 
-    println!("    -- SENDING MESSAGE (TYPE ANY KEYS TO STOP) --");
+    println!("    -- {} --", "SENDING MESSAGE (TYPE ANY KEYS TO STOP)".truecolor(0, 128, 128).bold());
 
     player_option_picked.clear();
     io::stdout().flush().unwrap();

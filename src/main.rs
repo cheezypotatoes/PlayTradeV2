@@ -65,7 +65,7 @@ fn main_menu_show() {
         .bold()
     );
 
-    let teal = |text: &str| text.truecolor(0, 128, 128);
+    let teal = |text: &str| text.truecolor(0, 128, 128).bold();
     let menu = [
         "Start Message.",
         "Token Settings.",

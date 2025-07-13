@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 use std::io::{self, Write};
-
+use colored::*;
 
 use crate::ini_file_helpers;
 
@@ -36,27 +36,73 @@ pub fn mode_setting_main() {
 }
 
 
+fn colorize_bool(value: &str) -> colored::ColoredString {
+    let val = value.to_uppercase();
+    if val == "TRUE" {
+        val.truecolor(0, 200, 0)
+    } else {
+        val.truecolor(200, 0, 0)
+    }
+    .bold()
+}
+
 fn mode_setting_menu_show() {
     let time_randomizer = ini_file_helpers::access_ini_data("Post Request Mode", "time_randomizer");
     let time_specific = ini_file_helpers::access_ini_data("Post Request Mode", "time_specific");
-    println!("    -- Post Request Modes --");
-    println!("    [0]:Multiple Servers  [{}]", ini_file_helpers::access_ini_data("Post Request Mode", "multiple_servers").to_uppercase());
-    println!("    [1]:Multiple Accounts [{}]", ini_file_helpers::access_ini_data("Post Request Mode", "multiple_accounts").to_uppercase());
-    println!("    [2]:Time Randomizer   [{}]{}", (time_randomizer != "0").to_string().to_uppercase(), if time_randomizer != "0" { format!(" [{} Minutes]", time_randomizer) } else { String::new() });
-    println!("    [3]:Time Specific     [{}]{}", (time_specific != "0").to_string().to_uppercase(), if time_specific != "0" { format!(" [{} Minutes]", time_specific) } else { String::new() });
+
+    println!("    {}", "-- Post Request Modes --".truecolor(0, 128, 128).bold());
+    println!(
+        "    {}:Multiple Servers  [{}]",
+        "[0]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&ini_file_helpers::access_ini_data("Post Request Mode", "multiple_servers"))
+    );
+    println!(
+        "    {}:Multiple Accounts [{}]",
+        "[1]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&ini_file_helpers::access_ini_data("Post Request Mode", "multiple_accounts"))
+    );
+    let time_randomizer_bool = (time_randomizer != "0").to_string();
+    println!(
+        "    {}:Time Randomizer   [{}]{}",
+        "[2]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&time_randomizer_bool),
+        if time_randomizer != "0" {
+            format!(" [{} Minutes]", time_randomizer)
+        } else {
+            String::new()
+        }
+    );
+    let time_specific_bool = (time_specific != "0").to_string();
+    println!(
+        "    {}:Time Specific     [{}]{}",
+        "[3]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&time_specific_bool),
+        if time_specific != "0" {
+            format!(" [{} Minutes]", time_specific)
+        } else {
+            String::new()
+        }
+    );
 
     println!("\n");
 
-    println!("    -- Message Modes --");
-    println!("    [4]:Randomize Fonts   [{}]", ini_file_helpers::access_ini_data("Message Mode", "randomize_fonts").to_uppercase());
-    println!("    [5]:Emoji Injection   [{}]", ini_file_helpers::access_ini_data("Message Mode", "emoji_injection").to_uppercase()); 
+    println!("    {}", "-- Message Modes --".truecolor(0, 128, 128).bold());
+    println!(
+        "    {}:Randomize Fonts   [{}]",
+        "[4]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&ini_file_helpers::access_ini_data("Message Mode", "randomize_fonts"))
+    );
+    println!(
+        "    {}:Emoji Injection   [{}]",
+        "[5]".truecolor(0, 128, 128).bold(),
+        colorize_bool(&ini_file_helpers::access_ini_data("Message Mode", "emoji_injection"))
+    );
 
     println!("\n    Type The Number To Toggle.");
 
     println!(
-    "
-    [6]. Return.
-    "
+        "    {}. Return.\n",
+        "[6]".truecolor(0, 128, 128).bold()
     );
 }
 
