@@ -8,6 +8,8 @@ use reqwest::blocking::Client;
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION, CONTENT_TYPE};
 use std::fs::{File};
 use std::collections::HashMap;
+use rand::{rng, Rng};
+
 use serde_json;
 
 
@@ -103,7 +105,14 @@ fn get_all_servers() -> Vec<String> {
 }
 
 fn send_message(authorization_token: &str, server_url: &str){
-    let message = ini_file_helpers::access_ini_data("settings", "message");
+    
+    let mut message = ini_file_helpers::access_ini_data("settings", "message");
+    let is_font_randomized= ini_file_helpers::access_ini_data("message mode", "randomize_fonts").parse::<bool>().unwrap_or(false);
+
+    if is_font_randomized {
+        message = font_randomizer(&message);
+    }
+       
 
     let json_body = format!(r#"{{ "content": "{}" }}"#, message);
 
@@ -174,6 +183,16 @@ pub fn message_sender_main() {
 
         
 }
+
+fn font_randomizer(message: &str) -> String {
+    let fonts = ["**", "||", "***", "*", ""];
+    let mut rng = rng();
+    let num = rng.random_range(0..=3);
+    
+
+    return format!("{}{}{}", fonts[num], message, fonts[num]);
+}
+
 
 fn toggle_thread_boolean() {
     IS_SENDER_THREAD_RUNNING.store(!IS_SENDER_THREAD_RUNNING.load(Ordering::Relaxed), Ordering::Relaxed)
