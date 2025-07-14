@@ -8,7 +8,7 @@ pub fn mode_setting_main() {
     let allowed_text: HashSet<&str> = HashSet::from(["0","1", "2", "3", "4", "5", "6"]);
     let mut player_option_picked = String::new(); 
 
-    while player_option_picked.trim() != "6" {
+    while player_option_picked.trim() != "5" {
         
         mode_setting_menu_show();
         print!("    PlayTrade <Mode Setting>: ");
@@ -24,12 +24,11 @@ pub fn mode_setting_main() {
         }
 
         match player_option_picked.trim() {
-            "0" => {  change_boolean_ini_data("Post Request Mode", "multiple_servers"); },
-            "1" => {  change_boolean_ini_data("Post Request Mode", "multiple_accounts"); },
-            "2" => {  change_number_ini_data("Post Request Mode", "time_randomizer"); },
-            "3" => {  change_number_ini_data("Post Request Mode", "time_specific"); },
-            "4" => {  change_boolean_ini_data("Message Mode", "randomize_fonts"); },
-            "5" => {  change_boolean_ini_data("Message Mode", "emoji_injection"); },
+            "0" => {  change_boolean_ini_data("Post Request Mode", "multiple_accounts"); },
+            "1" => {  change_number_ini_data("Post Request Mode", "time_randomizer"); },
+            "2" => {  change_number_ini_data("Post Request Mode", "time_specific"); },
+            "3" => {  change_boolean_ini_data("Message Mode", "randomize_fonts"); },
+            "4" => {  change_boolean_ini_data("Message Mode", "emoji_injection"); },
             _ => {},
         }
     }   
@@ -49,22 +48,16 @@ fn colorize_bool(value: &str) -> colored::ColoredString {
 fn mode_setting_menu_show() {
     let time_randomizer = ini_file_helpers::access_ini_data("Post Request Mode", "time_randomizer");
     let time_specific = ini_file_helpers::access_ini_data("Post Request Mode", "time_specific");
-
-    println!("    {}", "-- Post Request Modes --".truecolor(0, 128, 128).bold());
-    println!(
-        "    {}:Multiple Servers  [{}]",
-        "[0]".truecolor(0, 128, 128).bold(),
-        colorize_bool(&ini_file_helpers::access_ini_data("Post Request Mode", "multiple_servers"))
-    );
+    println!("\n    {}", "-- Post Request Modes --".truecolor(0, 128, 128).bold());
     println!(
         "    {}:Multiple Accounts [{}]",
-        "[1]".truecolor(0, 128, 128).bold(),
+        "[0]".truecolor(0, 128, 128).bold(),
         colorize_bool(&ini_file_helpers::access_ini_data("Post Request Mode", "multiple_accounts"))
     );
     let time_randomizer_bool = (time_randomizer != "0").to_string();
     println!(
         "    {}:Time Randomizer   [{}]{}",
-        "[2]".truecolor(0, 128, 128).bold(),
+        "[1]".truecolor(0, 128, 128).bold(),
         colorize_bool(&time_randomizer_bool),
         if time_randomizer != "0" {
             format!(" [{} Minutes]", time_randomizer)
@@ -75,7 +68,7 @@ fn mode_setting_menu_show() {
     let time_specific_bool = (time_specific != "0").to_string();
     println!(
         "    {}:Time Specific     [{}]{}",
-        "[3]".truecolor(0, 128, 128).bold(),
+        "[2]".truecolor(0, 128, 128).bold(),
         colorize_bool(&time_specific_bool),
         if time_specific != "0" {
             format!(" [{} Minutes]", time_specific)
@@ -89,12 +82,12 @@ fn mode_setting_menu_show() {
     println!("    {}", "-- Message Modes --".truecolor(0, 128, 128).bold());
     println!(
         "    {}:Randomize Fonts   [{}]",
-        "[4]".truecolor(0, 128, 128).bold(),
+        "[3]".truecolor(0, 128, 128).bold(),
         colorize_bool(&ini_file_helpers::access_ini_data("Message Mode", "randomize_fonts"))
     );
     println!(
         "    {}:Emoji Injection   [{}]",
-        "[5]".truecolor(0, 128, 128).bold(),
+        "[4]".truecolor(0, 128, 128).bold(),
         colorize_bool(&ini_file_helpers::access_ini_data("Message Mode", "emoji_injection"))
     );
 
@@ -102,7 +95,7 @@ fn mode_setting_menu_show() {
 
     println!(
         "    {}. Return.\n",
-        "[6]".truecolor(0, 128, 128).bold()
+        "[5]".truecolor(0, 128, 128).bold()
     );
 }
 
@@ -114,7 +107,7 @@ fn change_boolean_ini_data(category: &str, key: &str) {
 
 fn change_number_ini_data(category: &str, key: &str) {
     let mut time = String::new();
-    print!("    Maximum Minutes: ");
+    print!("    Maximum Second: ");
     io::stdout().flush().unwrap();
     let result = io::stdin().read_line(&mut time);
     match result {
