@@ -67,7 +67,7 @@ fn token_setting_menu_show() {
     let mut primary_found = false;
     let primary = ini_file_helpers::access_ini_data("Settings", "primary");
 
-    println!("    {}", "-- Token Setting --".truecolor(0, 128, 128).bold());
+    println!("\n    {}", "-- Token Setting --".truecolor(0, 128, 128).bold());
     for (key, value) in &hash_map {
         if key == &primary {
             println!("    {:<width$} - {} [Primary]", key, value, width = MAX_CHARACTERS);

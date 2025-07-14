@@ -127,7 +127,7 @@ fn server_setting_menu_show() {
     let hash_map = get_hashmap();
    
 
-    println!("    {}", "-- Server Setting --".truecolor(0, 128, 128).bold());
+    println!("\n    {}", "-- Server Setting --".truecolor(0, 128, 128).bold());
     for (key, value) in &hash_map {
         println!("    {:<width$} - {}", key, value, width = MAX_CHARACTERS);
     }
