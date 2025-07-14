@@ -17,7 +17,7 @@ use crate::ini_file_helpers;
 
 static IS_SENDER_THREAD_RUNNING: AtomicBool = AtomicBool::new(false);
 
-
+// TODO: PRINT IF ERROR SEND
 pub fn run_sender_thread(token: Vec<String>, servers: Vec<String>) -> Result<JoinHandle<()>, std::io::Error> {
     
     let is_multiple_account = ini_file_helpers::access_ini_data("post request mode", "multiple_accounts").parse::<bool>().unwrap_or(false);
@@ -30,13 +30,22 @@ pub fn run_sender_thread(token: Vec<String>, servers: Vec<String>) -> Result<Joi
     multiple_account_thread(token.clone(), servers)
 }
 
-fn multiple_account_thread(token: Vec<String>, server: Vec<String>) -> Result<JoinHandle<()>, std::io::Error> {
+fn multiple_account_thread(tokens: Vec<String>, servers: Vec<String>) -> Result<JoinHandle<()>, std::io::Error> {
     let handle = thread::spawn(move || {
+       
+        let mut debounce_time_per_server = ini_file_helpers::access_ini_data("post request mode", "time_specific").parse::<u64>().unwrap_or(0);
+            if debounce_time_per_server <= 0 {
+                debounce_time_per_server = 5;
+        }
         while IS_SENDER_THREAD_RUNNING.load(Ordering::Relaxed) {
-
-            println!("    MESSAGE SUCCESSFULLY SENT TO [{:?}]: TOKEN [{:?}] MULTIPLE", server ,token);
-            
-            thread::sleep(Duration::from_secs(1));
+            for token in &tokens {
+                for server in &servers {
+                    send_message(token, server);
+                    println!("    MESSAGE SUCCESSFULLY SENT TO [{}]", format!("{}", server).truecolor(0, 128, 128));
+                    
+                }
+            }
+            thread::sleep(Duration::from_secs(debounce_time_per_server));
         }
     });
 
@@ -45,21 +54,17 @@ fn multiple_account_thread(token: Vec<String>, server: Vec<String>) -> Result<Jo
 
 
 fn non_multiple_account_thread(token: String, servers: Vec<String>) -> Result<JoinHandle<()>, std::io::Error> {
-    
-
     let handle = thread::spawn(move || {
-        let mut server_cycle = servers.iter().cycle();
         let mut debounce_time_per_server = ini_file_helpers::access_ini_data("post request mode", "time_specific").parse::<u64>().unwrap_or(0);
         if debounce_time_per_server <= 0 {
             debounce_time_per_server = 5;
         }
 
         while IS_SENDER_THREAD_RUNNING.load(Ordering::Relaxed) {
-            if let Some(server) = server_cycle.next() {
+            for server in &servers {
                 send_message(&token, server);
                 println!("    MESSAGE SUCCESSFULLY SENT TO [{}]", format!("{}", server).truecolor(0, 128, 128));
             }
-
             thread::sleep(Duration::from_secs(debounce_time_per_server));
         }
     });
